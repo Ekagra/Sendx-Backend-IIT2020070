@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <input type="text" id="urlInput" placeholder="Enter URL">
+  <select id="customerType">
+    <option value="paying">Paying Customer</option>
+    <option value="non-paying">Non-Paying Customer</option>
+  </select>
+  <button onclick="crawl()">Crawl</button>
+  <div id="output"></div>
+</body>
+<script>
+function crawl() {
+  // Get the URL and customer type from the input fields
+  const urlInput = document.getElementById("urlInput");
+  const url = urlInput.value;
+  
+  // Get the selected customer type from the dropdown
+  const customerTypeSelect = document.getElementById("customerType");
+  const customerType = customerTypeSelect.value;
+
+  // Construct the URL with query parameters
+  const apiUrl = `/crawl?url=${encodeURIComponent(url)}&customerType=${customerType}`;
+
+  // Send a POST request to the backend
+  fetch(apiUrl, {
+    method: "POST",
+  })
+    .then((response) => {
+      if (response.ok) {
+        return response.text(); // Assuming the response is text.
+      } else {
+        throw new Error("Request failed");
+      }
+    })
+    .then((data) => {
+      // Display the result on the HTML page
+      const outputDiv = document.getElementById("output");
+      outputDiv.innerHTML = data;
+    })
+    .catch((error) => {
+      console.error("Error: " + error);
+    });
+}
+</script>
+</html>
